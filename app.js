@@ -2,20 +2,20 @@ const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
 
-app.use(cookieParser());
+app.use(cookieParser("我是秘密String"));
 
 app.get("/", (req, res) => {
   return res.send("這是首頁");
 });
 
 app.get("/setCookie", (req, res) => {
-  res.cookie("yourCookie", "OREAL");
+  res.cookie("yourCookie", "OREAL", { signed: true });
   return res.send("已設置cookies");
 });
 
 app.get("/seeCookie", (req, res) => {
-  console.log(req.cookies);
-  return res.send("看設定好的cookie");
+  console.log(req.signedCookies);
+  return res.send("看設定好的cookie  " + req.signedCookies.yourCookie);
 });
 
 app.listen(3000, () => {
