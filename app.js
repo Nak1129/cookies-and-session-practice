@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
-
+const flash = require("connect-flash");
 app.use(cookieParser(process.env.MYCOOKIESECERETKEY));
 app.use(
   session({
@@ -13,6 +13,7 @@ app.use(
     cookie: { secure: false }, //localhost
   })
 );
+app.use(flash());
 
 const checkUser = (req, res, next) => {
   if (!req.session.isVerified) {
@@ -23,7 +24,8 @@ const checkUser = (req, res, next) => {
 };
 
 app.get("/", (req, res) => {
-  return res.send("這是首頁");
+  req.flash("message", "歡迎來到網頁");
+  return res.send("這是首頁" + req.flash("message"));
 });
 
 app.get("/setCookie", (req, res) => {
